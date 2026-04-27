@@ -170,8 +170,8 @@ body {
       <img src="https://64.media.tumblr.com/9d86dd3b20212846a6a77d6c305ffae4/ae80985c3dc9ab7e-53/s540x810/17bfc36dcd39a856b8fd9dd0bd791cefcbfbc74c.jpg">
     </div>
     <div class="info">
-      <div class="username">brugernavn ✔</div>
-      <div class="bio">Pixel perfect Instagram mock 🔥</div>
+      <div class="username">sk8terboinoah</div>
+      <div class="bio">skibidi</div>
     </div>
   </div>
 
@@ -207,7 +207,11 @@ body {
 </div>
 
 <script>
-const posts = Array.from({length:12},(_,i)=>({img:`https://picsum.photos/500?${i}`,caption:`Post ${i}`,likes:Math.floor(Math.random()*1000)}));
+const posts = [
+  {img:'images/post1.jpg', caption:'Min første post', likes:120},
+  {img:'images/post2.jpg', caption:'Sommer vibes ☀️', likes:342},
+  {img:'images/post3.jpg', caption:'Weekend', likes:89}
+];
 const tagged = Array.from({length:6},(_,i)=>({img:`https://picsum.photos/500?tag${i}`,caption:`Tagged ${i}`,likes:Math.floor(Math.random()*300)}));
 
 const stories = [
