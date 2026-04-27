@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Instagram Pixel Perfect Mock</title>
+
+<!-- Instagram-like font -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+body {
+  margin:0;
+  background:#fafafa;
+  font-family:'Inter', sans-serif;
+}
+
+.app {
+  width:100%;
+  max-width:470px;
+  margin:auto;
+  background:#fff;
+  border:1px solid #dbdbdb;
+}
+
+/* HEADER */
+.header {
+  display:flex;
+  padding:16px;
+  align-items:center;
+}
+.profile-pic {
+  width:86px;
+  height:86px;
+  border-radius:50%;
+  padding:3px;
+  background:linear-gradient(45deg,#feda75,#d62976,#962fbf);
+  cursor:pointer;
+}
+.profile-pic img {
+  width:100%;
+  height:100%;
+  border-radius:50%;
+  border:3px solid white;
+}
+
+.info { margin-left:20px; }
+.username { font-weight:600; font-size:20px; }
+.bio { font-size:14px; margin-top:6px; }
+
+/* HIGHLIGHTS */
+.highlights {
+  display:flex;
+  overflow-x:auto;
+  padding:12px;
+}
+.highlight {
+  margin-right:14px;
+  text-align:center;
+  cursor:pointer;
+}
+.highlight img {
+  width:70px;
+  height:70px;
+  border-radius:50%;
+  border:2px solid #c7c7c7;
+  padding:2px;
+}
+.highlight span { font-size:12px; }
+
+/* TABS */
+.tabs {
+  display:flex;
+  border-top:1px solid #dbdbdb;
+}
+.tab {
+  flex:1;
+  text-align:center;
+  padding:12px;
+  cursor:pointer;
+}
+.tab.active { border-top:1px solid black; font-weight:600; }
+
+/* GRID */
+.grid {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:2px;
+}
+.grid img {
+  width:100%;
+  aspect-ratio:1/1;
+  object-fit:cover;
+  cursor:pointer;
+}
+.grid img:hover { filter:brightness(0.85); }
+
+/* MODAL */
+.modal {
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.85);
+  justify-content:center;
+  align-items:center;
+}
+.modal-box {
+  display:flex;
+  background:#fff;
+  max-width:900px;
+  width:90%;
+}
+.modal-box img { width:60%; }
+.modal-info { padding:16px; width:40%; }
+
+/* STORY VIEWER */
+.story {
+  display:none;
+  position:fixed;
+  inset:0;
+  background:black;
+  justify-content:center;
+  align-items:center;
+}
+.story-inner {
+  width:360px;
+  height:640px;
+  position:relative;
+}
+.story-inner img {
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.progress-bars {
+  display:flex;
+  position:absolute;
+  top:10px;
+  left:10px;
+  right:10px;
+  gap:4px;
+}
+.bar {
+  flex:1;
+  height:3px;
+  background:rgba(255,255,255,0.3);
+}
+.bar-fill {
+  height:100%;
+  width:0%;
+  background:white;
+}
+
+.nav {
+  position:absolute;
+  top:0;
+  width:50%;
+  height:100%;
+}
+.nav.left { left:0; }
+.nav.right { right:0; }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="header">
+    <div class="profile-pic" onclick="openStory(0)">
+      <img src="https://picsum.photos/200">
+    </div>
+    <div class="info">
+      <div class="username">brugernavn ✔</div>
+      <div class="bio">Pixel perfect Instagram mock 🔥</div>
+    </div>
+  </div>
+
+  <div class="highlights" id="highlights"></div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('posts',event)">▦</div>
+    <div class="tab" onclick="switchTab('tagged',event)">🏷</div>
+  </div>
+
+  <div id="posts" class="grid"></div>
+  <div id="tagged" class="grid" style="display:none"></div>
+</div>
+
+<div class="modal" id="modal" onclick="closeModal()">
+  <div class="modal-box">
+    <img id="modalImg">
+    <div class="modal-info">
+      <b>brugernavn</b>
+      <p id="caption"></p>
+      <p id="likes"></p>
+    </div>
+  </div>
+</div>
+
+<div class="story" id="storyViewer">
+  <div class="story-inner">
+    <div class="progress-bars" id="bars"></div>
+    <img id="storyImg">
+    <div class="nav left" onclick="prevStory()"></div>
+    <div class="nav right" onclick="nextStory()"></div>
+  </div>
+</div>
+
+<script>
+const posts = Array.from({length:12},(_,i)=>({img:`https://picsum.photos/500?${i}`,caption:`Post ${i}`,likes:Math.floor(Math.random()*1000)}));
+const tagged = Array.from({length:6},(_,i)=>({img:`https://picsum.photos/500?tag${i}`,caption:`Tagged ${i}`,likes:Math.floor(Math.random()*300)}));
+
+const stories = [
+ ['https://picsum.photos/400/700?1','https://picsum.photos/400/700?2','https://picsum.photos/400/700?3'],
+ ['https://picsum.photos/400/700?4','https://picsum.photos/400/700?5']
+];
+
+let sIndex=0, sSet=0, timer;
+
+function render(data,id){
+ const el=document.getElementById(id);
+ el.innerHTML='';
+ data.forEach((p,i)=>{
+  const img=document.createElement('img');
+  img.src=p.img;
+  img.onclick=()=>openPost(data,i);
+  el.appendChild(img);
+ });
+}
+render(posts,'posts');
+render(tagged,'tagged');
+
+function openPost(d,i){
+ modal.style.display='flex';
+ modalImg.src=d[i].img;
+ caption.innerText=d[i].caption;
+ likes.innerText=d[i].likes+' likes';
+}
+function closeModal(){ modal.style.display='none'; }
+
+function switchTab(tab,e){
+ document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+ e.target.classList.add('active');
+ posts.style.display = tab==='posts'?'grid':'none';
+ tagged.style.display = tab==='tagged'?'grid':'none';
+}
+
+function openStory(set){
+ sSet=set; sIndex=0;
+ storyViewer.style.display='flex';
+ renderBars();
+ playStory();
+}
+
+function renderBars(){
+ bars.innerHTML='';
+ stories[sSet].forEach(()=>{
+  const b=document.createElement('div');
+  b.className='bar';
+  b.innerHTML='<div class="bar-fill"></div>';
+  bars.appendChild(b);
+ });
+}
+
+function playStory(){
+ const fills=document.querySelectorAll('.bar-fill');
+ storyImg.src=stories[sSet][sIndex];
+ let w=0;
+ clearInterval(timer);
+ timer=setInterval(()=>{
+  w+=2;
+  fills[sIndex].style.width=w+'%';
+  if(w>=100){ nextStory(); }
+ },80);
+}
+
+function nextStory(){
+ sIndex++;
+ if(sIndex>=stories[sSet].length){ closeStory(); return; }
+ playStory();
+}
+
+function prevStory(){
+ sIndex=Math.max(0,sIndex-1);
+ playStory();
+}
+
+function closeStory(){ storyViewer.style.display='none'; clearInterval(timer); }
+
+const h=document.getElementById('highlights');
+stories.forEach((s,i)=>{
+ const d=document.createElement('div');
+ d.className='highlight';
+ d.innerHTML=`<img src="${s[0]}"><span>H${i+1}</span>`;
+ d.onclick=()=>openStory(i);
+ h.appendChild(d);
+});
+</script>
+
+</body>
+</html>
