@@ -190,7 +190,7 @@ body {
   <div class="modal-box">
     <img id="modalImg">
     <div class="modal-info">
-      <b>brugernavn</b>
+      <b>sk8terboinoah</b>
       <p id="caption"></p>
       <p id="likes"></p>
     </div>
@@ -208,15 +208,19 @@ body {
 
 <script>
 const posts = [
-  {img:'images/post1.jpg', caption:'Min første post', likes:120},
-  {img:'images/post2.jpg', caption:'Sommer vibes ☀️', likes:342},
-  {img:'images/post3.jpg', caption:'Weekend', likes:89}
+  {img:'https://i.pinimg.com/1200x/65/ee/9e/65ee9e23f9da3c46dfc0ce258dc88430.jpg', caption:'#sponsored', likes:4200},
+  {img:'images/post2.jpg', caption:'ok', likes:3427},
+  {img:'https://i.pinimg.com/1200x/b7/ae/da/b7aeda0a6289b79f6532144b13bdd138.jpg', caption:'stor mand', likes:5122}
 ];
-const tagged = Array.from({length:6},(_,i)=>({img:`https://picsum.photos/500?tag${i}`,caption:`Tagged ${i}`,likes:Math.floor(Math.random()*300)}));
+
+const tagged = [
+  {img:'images/tag1.jpg', caption:'Tagget 1', likes:545},
+  {img:'images/tag2.jpg', caption:'Tagget 2', likes:739}
+];
 
 const stories = [
- ['https://picsum.photos/400/700?1','https://picsum.photos/400/700?2','https://picsum.photos/400/700?3'],
- ['https://picsum.photos/400/700?4','https://picsum.photos/400/700?5']
+ ['https://i.pinimg.com/736x/d9/2d/d1/d92dd157c8a0ea78e60e1a568f1564d2.jpg','https://i.pinimg.com/736x/b3/f3/d0/b3f3d05186339ef687951adbb4f509ac.jpg','https://i.pinimg.com/736x/10/99/86/1099861d08651083baba8344e35bd21d.jpg'],
+ ['https://i.pinimg.com/1200x/90/19/87/90198783df99a6061c4984ad9fa5a1a6.jpg','https://i.pinimg.com/736x/63/e5/bf/63e5bf4370156c4c290b7d33318d9709.jpg']
 ];
 
 let sIndex=0, sSet=0, timer;
