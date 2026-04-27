@@ -223,6 +223,11 @@ const stories = [
  ['https://i.pinimg.com/1200x/90/19/87/90198783df99a6061c4984ad9fa5a1a6.jpg','https://i.pinimg.com/736x/63/e5/bf/63e5bf4370156c4c290b7d33318d9709.jpg']
 ];
 
+const highlightNames = [
+  'random',
+  '<3'
+];
+
 let sIndex=0, sSet=0, timer;
 
 function render(data,id){
@@ -299,7 +304,7 @@ const h=document.getElementById('highlights');
 stories.forEach((s,i)=>{
  const d=document.createElement('div');
  d.className='highlight';
- d.innerHTML=`<img src="${s[0]}"><span>H${i+1}</span>`;
+ d.innerHTML=`<img src=\"${s[0]}\"><span>${highlightNames[i]}</span>`;
  d.onclick=()=>openStory(i);
  h.appendChild(d);
 });
